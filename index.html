@@ -96,8 +96,15 @@
   .p-explain{grid-column: span 7; border-top-color:var(--cat-explain);}
   .p-risk{grid-column: span 5; border-top-color:var(--cat-risk);}
   .p-chain{grid-column: span 12;}
-  .p-tradelog{grid-column: span 6; border-top-color:var(--cat-explain);}
-  .p-telegram{grid-column: span 6; border-top-color:var(--cat-theta);}
+  .p-tradelog{grid-column: span 12; border-top-color:var(--cat-explain);}
+  .p-telegram{grid-column: span 12; border-top-color:var(--cat-theta);}
+  .log-section-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); font-weight:700;
+    margin-top:6px; padding-top:8px; border-top:1px solid var(--border);
+  }
+  select.btn{font-family:"IBM Plex Mono",monospace; padding:5px 10px;}
+  td.day-link{cursor:pointer; color:var(--cat-market); font-weight:600; text-decoration:underline dotted;}
+  td.day-link:hover{color:var(--accent);}
 
   .p-market .phead h3{color:var(--cat-market);}
   .p-gamma-blast .phead h3{color:var(--cat-blast);}
@@ -315,6 +322,25 @@
 
   <section class="panel p-tradelog">
     <div class="phead"><h3>Trade Log (BUY / EXIT)</h3><span class="sub" id="tradelog-count">&mdash;</span></div>
+
+    <div class="log-section-title" style="margin-top:0; padding-top:0; border-top:none;">Daily Summary</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th style="text-align:left;">Date</th><th>Buy Call</th><th>Exit Call</th>
+          <th>Buy Put</th><th>Exit Put</th><th>Net PnL</th>
+        </tr></thead>
+        <tbody id="daily-summary-body"></tbody>
+      </table>
+    </div>
+
+    <div class="log-section-title" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span>Per-Event Detail</span>
+      <span style="display:flex; align-items:center; gap:6px; text-transform:none; letter-spacing:normal; font-weight:400;">
+        <label for="log-date-filter">Filter by day</label>
+        <select class="btn" id="log-date-filter"><option value="all">All days</option></select>
+      </span>
+    </div>
     <div class="table-scroll">
       <table>
         <thead><tr>
@@ -432,11 +458,69 @@ function renderChain(chain, atm){
   });
 }
 
-function renderTradeLog(rows){
-  $("tradelog-count").textContent = (rows||[]).length + " recent event" + ((rows||[]).length===1?"":"s");
+const dayKeyOf = ts => new Date(ts).toISOString().slice(0,10);
+let allTradeEvents = []; // full history from trade_log_history.json, falls back to state.trade_log_tail
+
+function populateDateFilter(events){
+  const sel = $("log-date-filter");
+  if(!sel) return;
+  const prevValue = sel.value;
+  const days = Array.from(new Set(events.map(e => dayKeyOf(e.timestamp)))).sort().reverse();
+  const counts = {};
+  days.forEach(d => counts[d] = 0);
+  events.forEach(e => { const d = dayKeyOf(e.timestamp); if(counts[d]!==undefined) counts[d]++; });
+  sel.innerHTML = `<option value="all">All days (${events.length})</option>` +
+    days.map(d => `<option value="${d}">${d} (${counts[d]})</option>`).join("");
+  sel.value = (prevValue==="all" || days.includes(prevValue)) ? prevValue : "all";
+}
+
+function renderDailySummary(events){
+  const body = $("daily-summary-body"); if(!body) return;
+  const byDay = {};
+  events.forEach(e => {
+    const d = dayKeyOf(e.timestamp);
+    if(!byDay[d]) byDay[d] = {date:d, buyCall:0, exitCall:0, buyPut:0, exitPut:0, netPnl:0};
+    const agg = byDay[d];
+    if(e.event==="BUY_CALL") agg.buyCall++;
+    else if(e.event==="EXIT_CALL"){ agg.exitCall++; agg.netPnl += Number(e.pnl_points)||0; }
+    else if(e.event==="BUY_PUT") agg.buyPut++;
+    else if(e.event==="EXIT_PUT"){ agg.exitPut++; agg.netPnl += Number(e.pnl_points)||0; }
+  });
+  const days = Object.values(byDay).sort((a,b) => a.date < b.date ? 1 : -1);
+  body.innerHTML = "";
+  if(!days.length){
+    body.innerHTML = '<tr><td colspan="6" class="empty-feed" style="text-align:left;">No BUY/EXIT events logged yet.</td></tr>';
+    return;
+  }
+  days.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="day-link" data-date="${d.date}" style="text-align:left;">${d.date}</td>
+      <td class="num">${d.buyCall}</td>
+      <td class="num">${d.exitCall}</td>
+      <td class="num">${d.buyPut}</td>
+      <td class="num">${d.exitPut}</td>
+      <td class="num" style="color:${d.netPnl<0?'var(--bear)':d.netPnl>0?'var(--bull)':'inherit'}">${d.netPnl>=0?"+":""}${fmt(d.netPnl)}</td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".day-link").forEach(cell => {
+    cell.addEventListener("click", () => {
+      const sel = $("log-date-filter");
+      if(sel){ sel.value = cell.dataset.date; renderTradeHistorySection(allTradeEvents); }
+    });
+  });
+}
+
+function renderTradeLog(events){
+  populateDateFilter(events);
+  const sel = $("log-date-filter");
+  const filterVal = sel ? sel.value : "all";
+  const rows = filterVal==="all" ? events : events.filter(e => dayKeyOf(e.timestamp)===filterVal);
+
+  $("tradelog-count").textContent = events.length + " total event" + (events.length===1?"":"s") + (filterVal!=="all" ? ` -- showing ${filterVal}` : "");
   const body = $("tradelog-body"); body.innerHTML = "";
-  if(!rows || !rows.length){
-    body.innerHTML = '<tr><td colspan="6" class="empty-feed" style="text-align:left;">No BUY/EXIT events yet today.</td></tr>';
+  if(!rows.length){
+    body.innerHTML = '<tr><td colspan="6" class="empty-feed" style="text-align:left;">No BUY/EXIT events for this selection.</td></tr>';
     return;
   }
   rows.slice().reverse().forEach(e => {
@@ -449,7 +533,7 @@ function renderTradeLog(rows){
     const pnl = e.pnl_points === "" || e.pnl_points === null || e.pnl_points === undefined ? "" : `${Number(e.pnl_points)>=0?"+":""}${fmt(e.pnl_points)}`;
     const pnlColor = isBuy ? "inherit" : (Number(e.pnl_points) < 0 ? "var(--bear)" : "var(--bull)");
     tr.innerHTML = `
-      <td style="text-align:left;">${new Date(e.timestamp).toLocaleTimeString()}</td>
+      <td style="text-align:left;">${new Date(e.timestamp).toLocaleString()}</td>
       <td class="sig-cell ${dirClass}" style="text-align:left;">${e.event.replace("_"," ")}</td>
       <td class="num">${e.strike}</td>
       <td class="num">${fmt(e.spot)}</td>
@@ -457,6 +541,11 @@ function renderTradeLog(rows){
       <td class="num" style="color:${pnlColor}">${pnl}</td>`;
     body.appendChild(tr);
   });
+}
+
+function renderTradeHistorySection(events){
+  renderDailySummary(events);
+  renderTradeLog(events);
 }
 
 function renderTelegramFeed(rows){
@@ -568,8 +657,11 @@ function render(state){
   $("realized-pnl").textContent = fmt(risk.realized_pnl_points);
   $("stopped-for-day").textContent = risk.stopped_for_day ? ("YES -- " + (risk.stop_reason||"")) : "No";
 
-  renderTradeLog(state.trade_log_tail);
-  renderTelegramFeed(state.trade_log_tail);
+  // trade_log_tail is the fallback if trade_log_history.json hasn't loaded
+  // (or hasn't been published yet); once history loads, allTradeEvents wins.
+  const events = allTradeEvents.length ? allTradeEvents : (state.trade_log_tail || []);
+  renderTradeHistorySection(events);
+  renderTelegramFeed(events);
 }
 
 async function refresh(){
@@ -577,6 +669,17 @@ async function refresh(){
     const res = await fetch("live_state.json?t=" + Date.now(), {cache:"no-store"});
     if(!res.ok) throw new Error("HTTP " + res.status);
     const state = await res.json();
+
+    try{
+      const histRes = await fetch("trade_log_history.json?t=" + Date.now(), {cache:"no-store"});
+      if(histRes.ok){
+        const history = await histRes.json();
+        allTradeEvents = history.events || [];
+      }
+    }catch(histErr){
+      console.warn("trade_log_history.json not available yet:", histErr.message);
+    }
+
     render(state);
   }catch(e){
     $("updated-at").textContent = "Failed to load live_state.json -- " + e.message;
@@ -585,6 +688,7 @@ async function refresh(){
 }
 
 document.getElementById("refresh-btn").addEventListener("click", refresh);
+document.getElementById("log-date-filter").addEventListener("change", () => renderTradeHistorySection(allTradeEvents.length ? allTradeEvents : []));
 refresh();
 setInterval(refresh, 30000);
 </script>
