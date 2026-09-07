@@ -97,6 +97,7 @@
   .p-risk{grid-column: span 5; border-top-color:var(--cat-risk);}
   .p-chain{grid-column: span 12;}
   .p-tradelog{grid-column: span 12; border-top-color:var(--cat-explain);}
+  .p-signallog{grid-column: span 12; border-top-color:var(--cat-flip);}
   .p-telegram{grid-column: span 12; border-top-color:var(--cat-theta);}
   .log-section-title{
     font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); font-weight:700;
@@ -116,6 +117,7 @@
   .p-explain .phead h3{color:var(--cat-explain);}
   .p-risk .phead h3{color:var(--cat-risk);}
   .p-tradelog .phead h3{color:var(--cat-explain);}
+  .p-signallog .phead h3{color:var(--cat-flip);}
   .p-telegram .phead h3{color:var(--cat-theta);}
 
   @media (max-width: 1200px){
@@ -352,6 +354,38 @@
     </div>
   </section>
 
+  <section class="panel p-signallog">
+    <div class="phead"><h3>Signal Log (every tick)</h3><span class="sub" id="signallog-count">&mdash;</span></div>
+
+    <div class="log-section-title" style="margin-top:0; padding-top:0; border-top:none;">Daily Summary</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th style="text-align:left;">Date</th><th>Ticks</th><th>No Trade</th>
+          <th>Watch CE</th><th>Watch PE</th><th>Buy CE</th><th>Buy PE</th><th>Blocked / Error</th>
+        </tr></thead>
+        <tbody id="signallog-summary-body"></tbody>
+      </table>
+    </div>
+
+    <div class="log-section-title" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span>Per-Tick Detail</span>
+      <span style="display:flex; align-items:center; gap:6px; text-transform:none; letter-spacing:normal; font-weight:400;">
+        <label for="signallog-date-filter">Filter by day</label>
+        <select class="btn" id="signallog-date-filter"><option value="all">All days</option></select>
+      </span>
+    </div>
+    <div class="table-scroll" style="max-height:340px; overflow-y:auto;">
+      <table>
+        <thead><tr>
+          <th style="text-align:left;">Time</th><th style="text-align:left;">Action</th><th style="text-align:left;">Signal</th>
+          <th>Spot</th><th>Blast</th><th>CE</th><th>PE</th><th style="text-align:left;">Gamma Regime</th>
+        </tr></thead>
+        <tbody id="signallog-body"></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="panel p-telegram">
     <div class="phead"><h3>Telegram Alerts</h3><span class="sub">real messages sent by @algoniftyoptionbot</span></div>
     <div class="telegram-feed" id="telegram-feed"></div>
@@ -548,6 +582,96 @@ function renderTradeHistorySection(events){
   renderTradeLog(events);
 }
 
+let allSignalEvents = []; // full tick-by-tick history from signal_log_history.json
+
+function populateSignalDateFilter(events){
+  const sel = $("signallog-date-filter");
+  if(!sel) return;
+  const prevValue = sel.value;
+  const days = Array.from(new Set(events.map(e => dayKeyOf(e.timestamp)))).sort().reverse();
+  const counts = {};
+  days.forEach(d => counts[d] = 0);
+  events.forEach(e => { const d = dayKeyOf(e.timestamp); if(counts[d]!==undefined) counts[d]++; });
+  sel.innerHTML = `<option value="all">All days (${events.length})</option>` +
+    days.map(d => `<option value="${d}">${d} (${counts[d]})</option>`).join("");
+  sel.value = (prevValue==="all" || days.includes(prevValue)) ? prevValue : "all";
+}
+
+function renderSignalDailySummary(events){
+  const body = $("signallog-summary-body"); if(!body) return;
+  const byDay = {};
+  events.forEach(e => {
+    const d = dayKeyOf(e.timestamp);
+    if(!byDay[d]) byDay[d] = {date:d, ticks:0, noTrade:0, watchCe:0, watchPe:0, buyCe:0, buyPe:0, other:0};
+    const agg = byDay[d]; agg.ticks++;
+    const sig = e.signal || "";
+    if(e.action_taken==="BLOCKED" || e.action_taken==="DATA_ERROR") agg.other++;
+    else if(sig==="NO TRADE") agg.noTrade++;
+    else if(sig==="WATCH CE") agg.watchCe++;
+    else if(sig==="WATCH PE") agg.watchPe++;
+    else if(sig==="BUY CE") agg.buyCe++;
+    else if(sig==="BUY PE") agg.buyPe++;
+    else agg.other++;
+  });
+  const days = Object.values(byDay).sort((a,b) => a.date < b.date ? 1 : -1);
+  body.innerHTML = "";
+  if(!days.length){
+    body.innerHTML = '<tr><td colspan="8" class="empty-feed" style="text-align:left;">No ticks logged yet.</td></tr>';
+    return;
+  }
+  days.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="day-link" data-date="${d.date}" style="text-align:left;">${d.date}</td>
+      <td class="num">${d.ticks}</td><td class="num">${d.noTrade}</td>
+      <td class="num">${d.watchCe}</td><td class="num">${d.watchPe}</td>
+      <td class="num">${d.buyCe}</td><td class="num">${d.buyPe}</td><td class="num">${d.other}</td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".day-link").forEach(cell => {
+    cell.addEventListener("click", () => {
+      const sel = $("signallog-date-filter");
+      if(sel){ sel.value = cell.dataset.date; renderSignalLog(allSignalEvents); }
+    });
+  });
+}
+
+function renderSignalLog(events){
+  populateSignalDateFilter(events);
+  const sel = $("signallog-date-filter");
+  const filterVal = sel ? sel.value : "all";
+  const rows = filterVal==="all" ? events : events.filter(e => dayKeyOf(e.timestamp)===filterVal);
+
+  $("signallog-count").textContent = events.length + " total tick" + (events.length===1?"":"s") + (filterVal!=="all" ? ` -- showing ${filterVal}` : "");
+  const body = $("signallog-body"); body.innerHTML = "";
+  if(!rows.length){
+    body.innerHTML = '<tr><td colspan="8" class="empty-feed" style="text-align:left;">No ticks for this selection.</td></tr>';
+    return;
+  }
+  // most recent first; capped for render performance on a 300-400 tick/day table
+  rows.slice(-500).reverse().forEach(e => {
+    const tr = document.createElement("tr");
+    const sig = e.signal || "";
+    const sigClass = sig==="BUY CE"?"buy-ce": sig==="BUY PE"?"buy-pe": "";
+    const action = e.action_taken + (e.block_reason ? ` (${e.block_reason})` : e.error ? ` (${e.error})` : "");
+    tr.innerHTML = `
+      <td style="text-align:left;">${new Date(e.timestamp).toLocaleString()}</td>
+      <td style="text-align:left;">${action}</td>
+      <td class="sig-cell ${sigClass}" style="text-align:left;">${sig}</td>
+      <td class="num">${e.spot!==undefined && e.spot!=="" ? fmt(e.spot) : "—"}</td>
+      <td class="num">${e.gamma_blast_score!==undefined && e.gamma_blast_score!=="" ? fmt(e.gamma_blast_score,0) : "—"}</td>
+      <td class="num">${e.ce_score!==undefined && e.ce_score!=="" ? fmt(e.ce_score,1) : "—"}</td>
+      <td class="num">${e.pe_score!==undefined && e.pe_score!=="" ? fmt(e.pe_score,1) : "—"}</td>
+      <td style="text-align:left;">${e.gamma_regime || "—"}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+function renderSignalHistorySection(events){
+  renderSignalDailySummary(events);
+  renderSignalLog(events);
+}
+
 function renderTelegramFeed(rows){
   const wrap = $("telegram-feed");
   if(!rows || !rows.length){
@@ -662,6 +786,7 @@ function render(state){
   const events = allTradeEvents.length ? allTradeEvents : (state.trade_log_tail || []);
   renderTradeHistorySection(events);
   renderTelegramFeed(events);
+  renderSignalHistorySection(allSignalEvents);
 }
 
 async function refresh(){
@@ -680,6 +805,16 @@ async function refresh(){
       console.warn("trade_log_history.json not available yet:", histErr.message);
     }
 
+    try{
+      const sigRes = await fetch("signal_log_history.json?t=" + Date.now(), {cache:"no-store"});
+      if(sigRes.ok){
+        const sigHistory = await sigRes.json();
+        allSignalEvents = sigHistory.events || [];
+      }
+    }catch(sigErr){
+      console.warn("signal_log_history.json not available yet:", sigErr.message);
+    }
+
     render(state);
   }catch(e){
     $("updated-at").textContent = "Failed to load live_state.json -- " + e.message;
@@ -689,6 +824,7 @@ async function refresh(){
 
 document.getElementById("refresh-btn").addEventListener("click", refresh);
 document.getElementById("log-date-filter").addEventListener("change", () => renderTradeHistorySection(allTradeEvents.length ? allTradeEvents : []));
+document.getElementById("signallog-date-filter").addEventListener("change", () => renderSignalLog(allSignalEvents));
 refresh();
 setInterval(refresh, 30000);
 </script>
