@@ -14383,6 +14383,46 @@
       "iv_trap": "False",
       "block_reason": "",
       "error": ""
+    },
+    {
+      "timestamp": "2026-09-08T11:32:22.410571",
+      "data_source": "DHAN",
+      "action_taken": "DATA_ERROR",
+      "spot": "",
+      "signal": "",
+      "direction": "",
+      "ce_score": "",
+      "pe_score": "",
+      "gamma_blast_score": "",
+      "gamma_blast_level": "",
+      "gamma_regime": "",
+      "market_regime": "",
+      "selected_strike": "",
+      "gamma_trap": "",
+      "theta_trap": "",
+      "iv_trap": "",
+      "block_reason": "",
+      "error": "RuntimeError: Dhan option_chain failed: {'status': 'failure', 'remarks': {'error_code': None, 'error_type': None, 'error_message': None}, 'data': ''}"
+    },
+    {
+      "timestamp": "2026-09-08T11:33:22.411210",
+      "data_source": "DHAN",
+      "action_taken": "NONE",
+      "spot": "23664.5",
+      "signal": "WATCH PE",
+      "direction": "",
+      "ce_score": "51.03",
+      "pe_score": "65.31",
+      "gamma_blast_score": "43.97",
+      "gamma_blast_level": "BUILDING",
+      "gamma_regime": "NEUTRAL",
+      "market_regime": "GAMMA_TRANSITION",
+      "selected_strike": "",
+      "gamma_trap": "False",
+      "theta_trap": "False",
+      "iv_trap": "False",
+      "block_reason": "",
+      "error": ""
     }
   ]
 }
