@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-08T10:30:29.821020",
+  "updated_at": "2026-09-08T10:33:37.956316",
   "data_source": "DHAN",
   "market": {
-    "spot": 23695.2,
-    "futures": 23695.2,
+    "spot": 23688.8,
+    "futures": 23688.8,
     "day_high": 23717.25,
     "day_low": 23657.15,
     "expiry": "2026-09-08T15:30:00",
@@ -16,12 +16,12 @@
     }
   },
   "signal": {
-    "signal": "WATCH CE",
+    "signal": "NO TRADE",
     "direction": "BULLISH",
     "selected_strike": null,
     "trade_plan": null,
-    "ce_score": 57.87,
-    "pe_score": 46.55,
+    "ce_score": 50.64,
+    "pe_score": 46.24,
     "why": [],
     "warnings": [],
     "gamma_trap": false,
@@ -29,8 +29,8 @@
     "iv_trap": false
   },
   "gamma_blast": {
-    "score": 42.39,
-    "level": "BUILDING",
+    "score": 30.4,
+    "level": "NONE",
     "components": {
       "G1_gamma_concentration": {
         "value": 100.0,
@@ -38,39 +38,39 @@
         "contribution": 10.0
       },
       "G2_flip_proximity": {
-        "value": 94.02,
+        "value": 97.39,
         "weight": 0.08,
-        "contribution": 7.522
+        "contribution": 7.791
       },
       "G3_regime_transition": {
-        "value": 94.02,
+        "value": 97.39,
         "weight": 0.1,
-        "contribution": 9.402
+        "contribution": 9.739
       },
       "G4_wall_weakening": {
-        "value": 44.47,
+        "value": 0.0,
         "weight": 0.12,
-        "contribution": 5.336
+        "contribution": 0.0
       },
       "G5_oi_unwinding": {
-        "value": 51.68,
+        "value": 0.0,
         "weight": 0.1,
-        "contribution": 5.168
+        "contribution": 0.0
       },
       "G6_volume_expansion": {
-        "value": 7.5,
+        "value": 6.8,
         "weight": 0.1,
-        "contribution": 0.75
+        "contribution": 0.68
       },
       "G7_price_acceleration": {
-        "value": 9.62,
+        "value": 3.38,
         "weight": 0.12,
-        "contribution": 1.154
+        "contribution": 0.406
       },
       "G8_iv_expansion": {
-        "value": 24.99,
+        "value": 0.36,
         "weight": 0.05,
-        "contribution": 1.25
+        "contribution": 0.018
       },
       "G9_futures_confirmation": {
         "value": 0.0,
@@ -83,9 +83,9 @@
         "contribution": 0.0
       },
       "G11_rv_expansion": {
-        "value": 30.05,
+        "value": 29.51,
         "weight": 0.06,
-        "contribution": 1.803
+        "contribution": 1.771
       },
       "G12_breakout_confirmation": {
         "value": 0.0,
@@ -93,333 +93,333 @@
         "contribution": 0.0
       }
     },
-    "bullish": 57.14,
-    "bearish": 0.0
+    "bullish": 42.86,
+    "bearish": 14.29
   },
   "gex": {
-    "net_gex": 6728881712028.47,
-    "gamma_regime": "POSITIVE_GAMMA",
+    "net_gex": 2885768457864.38,
+    "gamma_regime": "NEUTRAL",
     "market_regime": "GAMMA_TRANSITION",
-    "gamma_flip": 23680.59,
+    "gamma_flip": 23682.54,
     "gamma_flip_confidence": 100.0,
     "call_wall": 23700,
-    "put_wall": 23650,
+    "put_wall": 23700,
     "profile": [
       {
         "strike": 22700,
-        "net_gex": -209466789034.44452
+        "net_gex": -199739495242.85117
       },
       {
         "strike": 22750,
-        "net_gex": -106625433037.52751
+        "net_gex": -104679630219.08836
       },
       {
         "strike": 22800,
-        "net_gex": -285869863958.9956
+        "net_gex": -280320615900.4429
       },
       {
         "strike": 22850,
-        "net_gex": -134019858805.16225
+        "net_gex": -133815118907.7368
       },
       {
         "strike": 22900,
-        "net_gex": -340106376113.1634
+        "net_gex": -348645038624.2118
       },
       {
         "strike": 22950,
-        "net_gex": -223397590726.56012
+        "net_gex": -220248213056.3502
       },
       {
         "strike": 23000,
-        "net_gex": -1237501314857.6262
+        "net_gex": -1246719909641.396
       },
       {
         "strike": 23050,
-        "net_gex": -244658781453.13156
+        "net_gex": -248713215876.8154
       },
       {
         "strike": 23100,
-        "net_gex": -589574851417.8668
+        "net_gex": -599162050125.2811
       },
       {
         "strike": 23150,
-        "net_gex": -676308231347.4539
+        "net_gex": -691576204547.2876
       },
       {
         "strike": 23200,
-        "net_gex": -1442251953145.2107
+        "net_gex": -1480283271129.3179
       },
       {
         "strike": 23250,
-        "net_gex": -894275946921.5677
+        "net_gex": -908035757403.5178
       },
       {
         "strike": 23300,
-        "net_gex": -2256056768011.55
+        "net_gex": -2287824739631.0317
       },
       {
         "strike": 23350,
-        "net_gex": -1230040752914.1323
+        "net_gex": -1276743957527.759
       },
       {
         "strike": 23400,
-        "net_gex": -2823192631631.865
+        "net_gex": -2878760804622.6953
       },
       {
         "strike": 23450,
-        "net_gex": -3531906967641.8203
+        "net_gex": -3659321677526.3823
       },
       {
         "strike": 23500,
-        "net_gex": -8544889568007.825
+        "net_gex": -8842731944790.38
       },
       {
         "strike": 23550,
-        "net_gex": -8028040401527.715
+        "net_gex": -8441943526349.264
       },
       {
         "strike": 23600,
-        "net_gex": -18047392701832.664
+        "net_gex": -18973176560845.99
       },
       {
         "strike": 23650,
-        "net_gex": -20416202523318.125
+        "net_gex": -21556527918814.402
       },
       {
         "strike": 23700,
-        "net_gex": -4415501184112.59
+        "net_gex": -5907472232557.578
       },
       {
         "strike": 23750,
-        "net_gex": 10117077637185.691
+        "net_gex": 10129244370370.723
       },
       {
         "strike": 23800,
-        "net_gex": 16805173773876.33
+        "net_gex": 16732892285237.96
       },
       {
         "strike": 23850,
-        "net_gex": 10115752708096.506
+        "net_gex": 11948397631551.018
       },
       {
         "strike": 23900,
-        "net_gex": 11518252389552.332
+        "net_gex": 11216639219434.277
       },
       {
         "strike": 23950,
-        "net_gex": 4681748149983.444
+        "net_gex": 4575851862867.097
       },
       {
         "strike": 24000,
-        "net_gex": 8603194377801.401
+        "net_gex": 8402172451786.403
       },
       {
         "strike": 24050,
-        "net_gex": 3077641717199.3467
+        "net_gex": 2961238639836.5884
       },
       {
         "strike": 24100,
-        "net_gex": 3631756541590.921
+        "net_gex": 3528795617543.658
       },
       {
         "strike": 24150,
-        "net_gex": 1618894198843.0144
+        "net_gex": 1593648207748.9211
       },
       {
         "strike": 24200,
-        "net_gex": 3180316506957.5923
+        "net_gex": 3133026996410.1826
       },
       {
         "strike": 24250,
-        "net_gex": 1219542832648.1472
+        "net_gex": 1189933731121.5867
       },
       {
         "strike": 24300,
-        "net_gex": 2169567201413.4155
+        "net_gex": 2158095783066.9275
       },
       {
         "strike": 24350,
-        "net_gex": 893339393498.8956
+        "net_gex": 879248002814.3762
       },
       {
         "strike": 24400,
-        "net_gex": 1235877387397.2817
+        "net_gex": 1221030411534.546
       },
       {
         "strike": 24450,
-        "net_gex": 519963232878.3119
+        "net_gex": 504868133728.7218
       },
       {
         "strike": 24500,
-        "net_gex": 1371679158425.929
+        "net_gex": 1368406652078.1587
       },
       {
         "strike": 24550,
-        "net_gex": 249297447017.97864
+        "net_gex": 240810213339.51315
       },
       {
         "strike": 24600,
-        "net_gex": 588974615894.3219
+        "net_gex": 591657536572.4943
       },
       {
         "strike": 24650,
-        "net_gex": 259724006660.27115
+        "net_gex": 260831096805.36612
       },
       {
         "strike": 24700,
-        "net_gex": 548388924924.32184
+        "net_gex": 535421497355.66815
       }
     ]
   },
   "theta": {
     "theta_efficiency_ce": 100.0,
     "theta_efficiency_pe": 100.0,
-    "gamma_theta_ratio_ce": 2.002465308325451,
-    "gamma_theta_ratio_pe": 3.2570885688917346,
-    "option_quality_ce": 74.41,
-    "option_quality_pe": 81.39
+    "gamma_theta_ratio_ce": 1.962049746527927,
+    "gamma_theta_ratio_pe": 3.644755978721571,
+    "option_quality_ce": 74.46,
+    "option_quality_pe": 83.01
   },
   "atm_greeks": {
-    "ce_delta": 0.4999212835724314,
-    "ce_gamma": 0.0020143965055470247,
-    "ce_theta_day": -51.90556248549465,
-    "pe_delta": -0.5005997088721816,
-    "pe_gamma": 0.0023739811754353514,
-    "ce_iv": 0.1484569546512702,
-    "pe_iv": 0.12597017045444456
+    "ce_delta": 0.4868867419085957,
+    "ce_gamma": 0.002021248788591466,
+    "ce_theta_day": -52.14166080747089,
+    "pe_delta": -0.5169053268224126,
+    "pe_gamma": 0.0025017236011648006,
+    "ce_iv": 0.14869436384191537,
+    "pe_iv": 0.12009305012530067
   },
   "chain": [
     {
       "strike": 23400,
-      "ce_oi": 192140,
-      "ce_chg_oi": 2665,
-      "ce_iv": 0.2665165393072505,
-      "ce_ltp": 307.6,
+      "ce_oi": 194285,
+      "ce_chg_oi": 2145,
+      "ce_iv": 0.2804932591688153,
+      "ce_ltp": 302.35,
       "pe_ltp": 1.4,
-      "pe_iv": 0.18485017769250167,
-      "pe_chg_oi": 3640,
-      "pe_oi": 8981310
+      "pe_iv": 0.18162359667612477,
+      "pe_chg_oi": -14365,
+      "pe_oi": 8966945
     },
     {
       "strike": 23450,
-      "ce_oi": 186355,
-      "ce_chg_oi": 2730,
-      "ce_iv": 0.23598067619268842,
-      "ce_ltp": 258.65,
+      "ce_oi": 189800,
+      "ce_chg_oi": 3445,
+      "ce_iv": 0.2449308506383337,
+      "ce_ltp": 253.15,
       "pe_ltp": 1.9,
-      "pe_iv": 0.16667336901173735,
-      "pe_chg_oi": -22165,
-      "pe_oi": 9042475
+      "pe_iv": 0.16344663874963047,
+      "pe_chg_oi": 80730,
+      "pe_oi": 9123205
     },
     {
       "strike": 23500,
-      "ce_oi": 2021630,
-      "ce_chg_oi": 23855,
-      "ce_iv": 0.20520156318642754,
-      "ce_ltp": 209.4,
+      "ce_oi": 2063360,
+      "ce_chg_oi": 41730,
+      "ce_iv": 0.2237940132391339,
+      "ce_ltp": 205.65,
       "pe_ltp": 3.4,
-      "pe_iv": 0.15642057430971462,
-      "pe_chg_oi": -292175,
-      "pe_oi": 18737550
+      "pe_iv": 0.15231385218211094,
+      "pe_chg_oi": -42835,
+      "pe_oi": 18694715
     },
     {
       "strike": 23550,
-      "ce_oi": 1460355,
-      "ce_chg_oi": 37180,
-      "ce_iv": 0.18995941071847353,
-      "ce_ltp": 163.0,
-      "pe_ltp": 5.95,
-      "pe_iv": 0.14390055439086816,
-      "pe_chg_oi": 237965,
-      "pe_oi": 13726765
+      "ce_oi": 1543685,
+      "ce_chg_oi": 83330,
+      "ce_iv": 0.191934348247271,
+      "ce_ltp": 157.55,
+      "pe_ltp": 6.2,
+      "pe_iv": 0.14095235043027118,
+      "pe_chg_oi": 209950,
+      "pe_oi": 13936715
     },
     {
       "strike": 23600,
-      "ce_oi": 7362485,
-      "ce_chg_oi": 112970,
-      "ce_iv": 0.1706715826016204,
-      "ce_ltp": 118.45,
-      "pe_ltp": 11.75,
-      "pe_iv": 0.13591588922973982,
-      "pe_chg_oi": 453375,
-      "pe_oi": 28874495
+      "ce_oi": 7467070,
+      "ce_chg_oi": 104585,
+      "ce_iv": 0.1730345911348405,
+      "ce_ltp": 114.0,
+      "pe_ltp": 12.25,
+      "pe_iv": 0.13277919240720235,
+      "pe_chg_oi": 110825,
+      "pe_oi": 28985320
     },
     {
       "strike": 23650,
-      "ce_oi": 10139480,
-      "ce_chg_oi": 35555,
-      "ce_iv": 0.15806995678071742,
-      "ce_ltp": 79.6,
-      "pe_ltp": 22.7,
-      "pe_iv": 0.1289646457106678,
-      "pe_chg_oi": 480610,
-      "pe_oi": 30189575
+      "ce_oi": 10452130,
+      "ce_chg_oi": 312650,
+      "ce_iv": 0.15771836856286806,
+      "ce_ltp": 75.45,
+      "pe_ltp": 23.85,
+      "pe_iv": 0.12625528995982527,
+      "pe_chg_oi": 512070,
+      "pe_oi": 30701645
     },
     {
       "strike": 23700,
-      "ce_oi": 36810735,
-      "ce_chg_oi": -248820,
-      "ce_iv": 0.1484569546512702,
-      "ce_ltp": 48.1,
-      "pe_ltp": 42.05,
-      "pe_iv": 0.12597017045444456,
-      "pe_chg_oi": 93145,
-      "pe_oi": 35651980
+      "ce_oi": 38039690,
+      "ce_chg_oi": 1228955,
+      "ce_iv": 0.14869436384191537,
+      "ce_ltp": 44.9,
+      "pe_ltp": 43.75,
+      "pe_iv": 0.12009305012530067,
+      "pe_chg_oi": 692575,
+      "pe_oi": 36344555
     },
     {
       "strike": 23750,
-      "ce_oi": 26404300,
-      "ce_chg_oi": 6110,
-      "ce_iv": 0.14984893354778053,
-      "ce_ltp": 27.85,
-      "pe_ltp": 71.45,
-      "pe_iv": 0.12418848615819716,
-      "pe_chg_oi": 1495,
-      "pe_oi": 11760970
+      "ce_oi": 26902655,
+      "ce_chg_oi": 498355,
+      "ce_iv": 0.149918200527964,
+      "ce_ltp": 25.55,
+      "pe_ltp": 74.55,
+      "pe_iv": 0.11689970027096615,
+      "pe_chg_oi": -219375,
+      "pe_oi": 11541595
     },
     {
       "strike": 23800,
-      "ce_oi": 35191650,
-      "ce_chg_oi": 288925,
-      "ce_iv": 0.15583895324741856,
-      "ce_ltp": 15.85,
-      "pe_ltp": 109.25,
-      "pe_iv": 0.12109013670133724,
-      "pe_chg_oi": -26650,
-      "pe_oi": 9951630
+      "ce_oi": 35805315,
+      "ce_chg_oi": 613665,
+      "ce_iv": 0.15644117749939146,
+      "ce_ltp": 14.5,
+      "pe_ltp": 113.4,
+      "pe_iv": 0.10881404982088445,
+      "pe_chg_oi": -145990,
+      "pe_oi": 9805640
     },
     {
       "strike": 23850,
-      "ce_oi": 19965400,
-      "ce_chg_oi": 16640,
-      "ce_iv": 0.16235724284356184,
-      "ce_ltp": 8.85,
-      "pe_ltp": 153.2,
-      "pe_iv": 0.11962900859315241,
-      "pe_chg_oi": -74490,
-      "pe_oi": 3088670
+      "ce_oi": 20032545,
+      "ce_chg_oi": 67145,
+      "ce_iv": 0.16446070869555118,
+      "ce_ltp": 8.2,
+      "pe_ltp": 156.75,
+      "pe_iv": 0.0,
+      "pe_chg_oi": -31005,
+      "pe_oi": 3057665
     },
     {
       "strike": 23900,
-      "ce_oi": 22978410,
-      "ce_chg_oi": 54080,
-      "ce_iv": 0.17423991358636226,
-      "ce_ltp": 5.4,
-      "pe_ltp": 199.7,
+      "ce_oi": 22963265,
+      "ce_chg_oi": -15145,
+      "ce_iv": 0.1763843626813727,
+      "ce_ltp": 5.05,
+      "pe_ltp": 204.1,
       "pe_iv": 0.0,
-      "pe_chg_oi": -1560,
-      "pe_oi": 3014635
+      "pe_chg_oi": -32305,
+      "pe_oi": 2982330
     },
     {
       "strike": 23950,
-      "ce_oi": 11404315,
-      "ce_chg_oi": -85085,
-      "ce_iv": 0.1864823979025844,
-      "ce_ltp": 3.4,
-      "pe_ltp": 247.2,
+      "ce_oi": 11441625,
+      "ce_chg_oi": 37310,
+      "ce_iv": 0.1885304311356168,
+      "ce_ltp": 3.2,
+      "pe_ltp": 253.45,
       "pe_iv": 0.0,
-      "pe_chg_oi": -7085,
-      "pe_oi": 1427075
+      "pe_chg_oi": -5590,
+      "pe_oi": 1421485
     }
   ],
   "risk": {
