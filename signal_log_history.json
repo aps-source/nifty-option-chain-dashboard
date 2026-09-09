@@ -20744,6 +20744,46 @@
       "iv_trap": "True",
       "block_reason": "",
       "error": ""
+    },
+    {
+      "timestamp": "2026-09-09T08:39:45.006475",
+      "data_source": "DHAN",
+      "action_taken": "DATA_ERROR",
+      "spot": "",
+      "signal": "",
+      "direction": "",
+      "ce_score": "",
+      "pe_score": "",
+      "gamma_blast_score": "",
+      "gamma_blast_level": "",
+      "gamma_regime": "",
+      "market_regime": "",
+      "selected_strike": "",
+      "gamma_trap": "",
+      "theta_trap": "",
+      "iv_trap": "",
+      "block_reason": "",
+      "error": "RuntimeError: Dhan option_chain failed: {'status': 'failure', 'remarks': {'error_code': None, 'error_type': None, 'error_message': None}, 'data': ''}"
+    },
+    {
+      "timestamp": "2026-09-09T08:40:45.007500",
+      "data_source": "DHAN",
+      "action_taken": "NONE",
+      "spot": "23635.1",
+      "signal": "NO TRADE",
+      "direction": "",
+      "ce_score": "49.52",
+      "pe_score": "61.28",
+      "gamma_blast_score": "16.34",
+      "gamma_blast_level": "NONE",
+      "gamma_regime": "POSITIVE_GAMMA",
+      "market_regime": "LOW_VOLATILITY",
+      "selected_strike": "",
+      "gamma_trap": "False",
+      "theta_trap": "False",
+      "iv_trap": "False",
+      "block_reason": "",
+      "error": ""
     }
   ]
 }
